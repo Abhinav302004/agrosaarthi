@@ -7,11 +7,16 @@ WORKDIR /app
 # Copy package files for better caching
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci --only=production
+# Install all dependencies (including dev dependencies needed for build)
+RUN npm ci
 
-# Copy source code
+# Copy all source files
 COPY . .
+
+# Create .env file with placeholder values for build
+RUN echo "VITE_SUPABASE_URL=placeholder" > .env && \
+    echo "VITE_SUPABASE_ANON_KEY=placeholder" >> .env && \
+    echo "VITE_WEATHER_API_KEY=placeholder" >> .env
 
 # Build the application
 RUN npm run build
