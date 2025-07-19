@@ -13,10 +13,10 @@ RUN npm ci
 # Copy all source files
 COPY . .
 
-# Create .env file with placeholder values for build
-RUN echo "VITE_SUPABASE_URL=placeholder" > .env && \
-    echo "VITE_SUPABASE_ANON_KEY=placeholder" >> .env && \
-    echo "VITE_WEATHER_API_KEY=placeholder" >> .env
+# Create .env file with empty values for build (will be overridden at runtime)
+RUN echo "VITE_SUPABASE_URL=" > .env && \
+    echo "VITE_SUPABASE_ANON_KEY=" >> .env && \
+    echo "VITE_OPENWEATHER_API_KEY=" >> .env
 
 # Build the application
 RUN npm run build

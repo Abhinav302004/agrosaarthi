@@ -1,6 +1,9 @@
-export const OPENWEATHER_API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY;
+export const OPENWEATHER_API_KEY = import.meta.env.VITE_OPENWEATHER_API_KEY || '';
 
 export async function getLatLonFromDistrict(district: string) {
+  if (!OPENWEATHER_API_KEY) {
+    throw new Error("OpenWeather API key not configured");
+  }
   // Still use OpenWeather geocoding for lat/lon
   const url = `https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(
     district
