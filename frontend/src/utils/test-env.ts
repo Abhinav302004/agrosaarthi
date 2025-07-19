@@ -9,7 +9,7 @@ export function checkEnvironmentVariables() {
   console.log('Environment variables:', env);
 
   const missing = Object.entries(env)
-    .filter(([key, value]) => !value)
+    .filter(([value]) => !value)
     .map(([key]) => key);
 
   if (missing.length > 0) {
