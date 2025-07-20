@@ -13,6 +13,6 @@ export default defineConfig({
       //     rewrite: (path) => path.replace(/^\/predict/, "/predict"),
       //     secure: false,
       //   },
-      },
+      // },
   },
 });
