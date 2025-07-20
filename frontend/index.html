@@ -5,10 +5,14 @@
     <link rel="icon" type="image/png" href="/src/assets/logo-1.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AgroSaarthi</title>
+
+    <!-- Inject runtime env variables before React loads -->
+    <script src="/env.js"></script>
   </head>
   <body>
     <div id="root"></div>
-    <script src="/env.js"></script>
+
+    <!-- Main React/Vite script -->
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 
-// Declare the runtime environment variables type
+// Declare global window interface for runtime env vars
 declare global {
   interface Window {
     __ENV__?: {
@@ -11,31 +11,27 @@ declare global {
   }
 }
 
-// Get environment variables from runtime config or build-time config
+// Helper function to get env variables from runtime or build time
 const getEnvVar = (key: string): string => {
-  // Check if runtime environment variables are available
-  if (typeof window !== 'undefined' && window.__ENV__) {
-    return (window.__ENV__ as any)[key] || '';
+  if (typeof window !== "undefined" && window.__ENV__ && (window.__ENV__ as any)[key]) {
+    return (window.__ENV__ as any)[key];
   }
-  // Fall back to build-time environment variables
-  return import.meta.env[key] || '';
+  return (import.meta.env[key] as string | undefined) ?? "";
 };
 
-const supabaseUrl = getEnvVar('VITE_SUPABASE_URL');
-const supabaseKey = getEnvVar('VITE_SUPABASE_ANON_KEY');
+const supabaseUrl = getEnvVar("VITE_SUPABASE_URL");
+const supabaseKey = getEnvVar("VITE_SUPABASE_ANON_KEY");
 
-// Check if environment variables are properly configured
+// Fail-fast if required env vars are missing
 if (!supabaseUrl || !supabaseKey) {
-  console.error('Supabase environment variables are not configured:', {
-    VITE_SUPABASE_URL: supabaseUrl ? 'Set' : 'Missing',
-    VITE_SUPABASE_ANON_KEY: supabaseKey ? 'Set' : 'Missing'
-  });
+  throw new Error(
+    `Missing Supabase environment variables:
+     VITE_SUPABASE_URL: ${supabaseUrl ? "Set" : "Missing"},
+     VITE_SUPABASE_ANON_KEY: ${supabaseKey ? "Set" : "Missing"}`
+  );
 }
 
 // Create Supabase client
-const supabase = createClient(
-  supabaseUrl || 'https://dummy.supabase.co',
-  supabaseKey || 'dummy-key'
-);
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 export default supabase;
