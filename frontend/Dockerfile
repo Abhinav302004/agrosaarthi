@@ -13,13 +13,16 @@ RUN npm ci
 # Copy all source files
 COPY . .
 
-# Create .env file with empty values for build (will be overridden at runtime)
-RUN echo "VITE_SUPABASE_URL=" > .env && \
-    echo "VITE_SUPABASE_ANON_KEY=" >> .env && \
-    echo "VITE_OPENWEATHER_API_KEY=" >> .env
 
 # Build the application
 RUN npm run build
+
+# Create env.js file for runtime environment variables
+RUN echo "window.__ENV__ = {" > /app/dist/env.js && \
+    echo "  VITE_SUPABASE_URL: '\$$VITE_SUPABASE_URL'," >> /app/dist/env.js && \
+    echo "  VITE_SUPABASE_ANON_KEY: '\$$VITE_SUPABASE_ANON_KEY'," >> /app/dist/env.js && \
+    echo "  VITE_OPENWEATHER_API_KEY: '\$$VITE_OPENWEATHER_API_KEY'" >> /app/dist/env.js && \
+    echo "};" >> /app/dist/env.js
 
 # Production stage
 FROM nginx:alpine
